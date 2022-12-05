@@ -1,69 +1,89 @@
 <template>
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-12 col-md-6 offset-md-3">
-                <div class="card shadow sm">
-                    <div class="card-body">
-                        <h1 class="text-center">Login</h1>
-                        <hr/>
-                        <form action="javascript:void(0)" class="row" method="post">
-                            <div class="form-group col-12">
-                                <label for="email" class="font-weight-bold">Email</label>
-                                <input type="text" v-model="email" name="email" id="email" class="form-control">
-                            </div>
-                            <div class="form-group col-12">
-                                <label for="password" class="font-weight-bold">Password</label>
-                                <input type="password" v-model="password" name="password" id="password" class="form-control">
-                            </div>
-                            <div class="col-12 mb-2">
-                                <button type="submit" @click="login" class="btn btn-primary btn-block">
-                                    Login
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+     <div class="container">
+    <b-card
+      bg-variant="dark"
+      header="Vue_JWT_APP"
+      text-variant="white"
+      class="text-center"
+    >
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3 col-sm-10 offset-sm-1">
+          <form
+            class="text-center border border-primary p-5"
+            style="margin-top:70px;height:auto;padding-top:100px !important;"
+            @submit.prevent="loginUser"
+          >
+            <input
+              type="text"
+              id="email"
+              class="form-control mb-5"
+              placeholder="Email"
+              v-model="auth.email"
+            />
+            <!-- Password -->
+            <input
+              type="password"
+              id="password"
+              class="form-control mb-5"
+              placeholder="Password"
+              v-model="auth.password"
+            />
+            <p>
+              Dont have an account? Click
+              <router-link to="/register"> here </router-link> to sign up
+            </p>
+        
+              <button class="btn btn-primary btn-block w-75 my-4" type="submit" @click=login>
+                Sign in
+              </button>
+          </form>
         </div>
-    </div>
+      </div>
+    </b-card>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Vuex from 'vuex'
 
 export default {
-  name: 'LoginForm',
-  data(){
-      return{
-          email: '',
-          password: '',
-      }
-  },
-  methods: {
-     async login(){
-        console.log("function has started");
-        console.log(this.email, this.password)
-        // let r = await axios.get("http://localhost:2020/getCustomers"); 
-        try {
-       axios.post('http://localhost:2020/auth/login', {email: this.email, password: this.password})
-       .then(function (){
-        console.log();
-       })
-       console.log("request is gedaan")
-    //    if (r.status = 200) {
-    //         console.log("resultaat is" + r)
-    //         axios.defaults.headers.common['Authorization'] = 'Bearer ' + r;
-    //         localStorage.setItem( 'token', JSON.stringify(r) );
-    //         this.$router.push("/directory")
-    //     } else { 
-    //         console.log("Mission is a failure")
-    //     }
-        } catch (error) {
-            console.log("I have a bad feeling about this")
+    data() {
+        return {
+            auth: {
+                email: "",
+                password: "",
+            }
         }
-        console.log(r)
+    },
+    methods: {
+        async login() {
+            const URL = "http://localhost:2020/auth/login";
+                axios(URL, {
+                    method: 'POST',
+                    headers: {
+                    'content-type': 'application/json',
+                    },
+                    data: this.auth,
+                })
+                    .then(response => response.data)
+                    .catch(error => {
+                    throw error;
+                    });
+            // try {
+            //     console.log("function has started");
+            //     console.log(axios.post("http://localhost:2020/auth/login", this.auth));
+            //     let response = await axios.post("http://localhost:2020/auth/login", this.auth);
+            //     console.log("Request was succesful")
+            //     console.log(response)
+            //     let token = response.data.token;
+            //     localStorage.setItem("user", token);
+            //     console.log("prepare for a fast redirect!")
+            //     this.$router.push("/");
+            // } catch (err) {
+            //     console.log(err.response);
+            // }
         }
+    }
 }
-}
+
 </script>
