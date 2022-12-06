@@ -57,18 +57,11 @@ export default {
     },
     methods: {
         async login() {
-            const URL = "http://localhost:2020/auth/login";
-                axios(URL, {
-                    method: 'POST',
-                    headers: {
-                    'content-type': 'application/json',
-                    },
-                    data: this.auth,
-                })
-                    .then(response => response.data)
-                    .catch(error => {
-                    throw error;
-                    });
+          console.log(this.auth);
+          axios.post("http://localhost:2020/auth/login", this.auth).then((response) => {
+              console.log(response);
+          })
+
             // try {
             //     console.log("function has started");
             //     console.log(axios.post("http://localhost:2020/auth/login", this.auth));
