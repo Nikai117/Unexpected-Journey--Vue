@@ -1,11 +1,5 @@
 <template>
      <div class="container">
-    <b-card
-      bg-variant="dark"
-      header="Vue_JWT_APP"
-      text-variant="white"
-      class="text-center"
-    >
       <div class="row">
         <div class="col-lg-6 offset-lg-3 col-sm-10 offset-sm-1">
           <form
@@ -39,7 +33,6 @@
           </form>
         </div>
       </div>
-    </b-card>
   </div>
 </template>
 
@@ -58,8 +51,10 @@ export default {
     methods: {
         async login() {
           console.log(this.auth);
-          axios.post("http://localhost:2020/auth/login", this.auth).then((response) => {
-              console.log(response);
+          axios.post("auth/login", this.auth).then(response => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+
+            localStorage.setItem( 'token', JSON.stringify(response.data.token) );
           })
 
             // try {
