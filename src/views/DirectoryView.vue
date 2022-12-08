@@ -30,14 +30,29 @@ export default {
     name: "customer",
     data() {
         return {
-            items: []
+            items: [],
+            data: {},
+            newdata: [],
             
     }
 },
  async mounted (){
+
+    try {
+        const token = localStorage.getItem('token')
+        console.log(data)
+        const newdata = axios.get("http://localhost:2020/auth", {"token": token});
+        console.log(newdata)
+
     axios.get("http://localhost:2020/getCustomers")
     .then(res => (this.items = res.data)).catch(error => console.log(error))
     console.log(this.items)
-}
+    } catch {
+        console.log("Oh no, it is broken")
+    }
+},
+
+
+
 }
 </script>

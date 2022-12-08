@@ -12,7 +12,7 @@
               id="email"
               class="form-control mb-5"
               placeholder="Email"
-              v-model="auth.email"
+              v-model="email"
             />
             <!-- Password -->
             <input
@@ -20,7 +20,7 @@
               id="password"
               class="form-control mb-5"
               placeholder="Password"
-              v-model="auth.password"
+              v-model="password"
             />
             <p>
               Dont have an account? Click
@@ -40,38 +40,65 @@
 import axios from 'axios';
 
 export default {
-    data() {
-        return {
-            auth: {
-                email: "",
-                password: "",
-            }
-        }
-    },
-    methods: {
-        async login() {
-          console.log(this.auth);
-          axios.post("auth/login", this.auth).then(response => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-
-            localStorage.setItem( 'token', JSON.stringify(response.data.token) );
-          })
-
-            // try {
-            //     console.log("function has started");
-            //     console.log(axios.post("http://localhost:2020/auth/login", this.auth));
-            //     let response = await axios.post("http://localhost:2020/auth/login", this.auth);
-            //     console.log("Request was succesful")
-            //     console.log(response)
-            //     let token = response.data.token;
-            //     localStorage.setItem("user", token);
-            //     console.log("prepare for a fast redirect!")
-            //     this.$router.push("/");
-            // } catch (err) {
-            //     console.log(err.response);
-            // }
-        }
+  data() {
+    return {
+      email: '',
+      password: ''
     }
+  },
+  methods: {
+    async login() {
+      // Stuur een POST-verzoek naar de /login-endpoint van de backend API
+      // met de gebruikersnaam en het wachtwoord als data
+      const { data } = await axios.post('/login', {
+        email: this.email,
+        password: this.password
+      })
+
+      console.log(data)
+
+      // Sla het JWT-token op in de local storage
+      localStorage.setItem('token', data.token)
+
+      // Redirect naar de home-pagina
+      this.$router.push('/')
+    }
+  }
 }
 
-</script>
+// export default {
+//     data() {
+//         return {
+//             auth: {
+//                 email: "",
+//                 password: "",
+//             }
+//         }
+//     },
+//     methods: {
+//         async login() {
+//           console.log(this.auth);
+//           axios.post("auth/login", this.auth).then(response => {
+//             axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+
+//             localStorage.setItem( 'token', JSON.stringify(response.data.token) );
+//           })
+
+//             // try {
+//             //     console.log("function has started");
+//             //     console.log(axios.post("http://localhost:2020/auth/login", this.auth));
+//             //     let response = await axios.post("http://localhost:2020/auth/login", this.auth);
+//             //     console.log("Request was succesful")
+//             //     console.log(response)
+//             //     let token = response.data.token;
+//             //     localStorage.setItem("user", token);
+//             //     console.log("prepare for a fast redirect!")
+//             //     this.$router.push("/");
+//             // } catch (err) {
+//             //     console.log(err.response);
+//             // }
+//         }
+//     }
+// }
+
+// </script>
