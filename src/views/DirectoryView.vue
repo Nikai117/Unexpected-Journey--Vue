@@ -26,29 +26,34 @@
 
 <script>
 import axios from 'axios';
+import jwt_decode from "jwt-decode";
+
 export default {
     name: "customer",
     data() {
         return {
             items: [],
-            data: {},
-            newdata: [],
+            newdata: "",
             
     }
 },
  async mounted (){
-
+    const token = localStorage.getItem('token')
     try {
-        const token = localStorage.getItem('token')
-        console.log(data)
-        const newdata = axios.get("http://localhost:2020/auth", {"token": token});
-        console.log(newdata)
-
+        let user = jwt_decode(token);
+        // const newdata = axios.get("http://localhost:2020/auth", {"token": token});
+        // console.log(newdata)
+        
+    if(user.role == "member") {
     axios.get("http://localhost:2020/getCustomers")
     .then(res => (this.items = res.data)).catch(error => console.log(error))
     console.log(this.items)
-    } catch {
+    } else {
+        console.log("501 Unauthorized")
+    }
+    } catch (error){
         console.log("Oh no, it is broken")
+        console.log(error)
     }
 },
 
